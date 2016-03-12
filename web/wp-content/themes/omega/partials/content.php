@@ -2,15 +2,9 @@
 
 	<div class="entry-wrap">
 		
-		<?php omega_do_atomic( 'before_entry' ); // omega_before_entry ?>
-
-		<div class="entry-content">		
-
-			<?php omega_do_atomic( 'entry' ); // omega_entry ?>
-			
-		</div><!-- .entry-content -->
-
-		<?php omega_do_atomic( 'after_entry' ); // omega_after_entry ?>
+		<?php do_action( 'omega_before_entry' ); ?>	
+		<?php do_action( 'omega_entry' ); ?>
+		<?php do_action( 'omega_after_entry' ); ?>
 
 	</div><!-- .entry-wrap -->
 	

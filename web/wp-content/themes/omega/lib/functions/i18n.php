@@ -51,11 +51,11 @@ function omega_load_framework_textdomain( $domain ) {
 	$locale = get_locale();
 
 	/* Check if the mofile is located in parent/child theme /languages folder. */
-	$mofile = locate_template( array( "languages/{$domain}-{$locale}.mo" ) );
+	$mofile = locate_template( array( "languages/{$locale}.mo" ) );
 
 	/* If no mofile was found in the parent/child theme, set it to the framework's mofile. */
 	if ( empty( $mofile ) )
-		$mofile = trailingslashit( OMEGA_LANGUAGES ) . "{$domain}-{$locale}.mo";
+		$mofile = trailingslashit( OMEGA_LANGUAGES ) . "{$locale}.mo";
 
 	return load_textdomain( $domain, $mofile );
 }
@@ -151,7 +151,7 @@ function omega_load_textdomain_mofile( $mofile, $domain ) {
 
 		/* Check for a $domain-$locale.mo file in the parent and child theme root and /languages folder. */
 		$locale = get_locale();
-		$locate_mofile = locate_template( array( "languages/{$domain}-{$locale}.mo", "{$domain}-{$locale}.mo" ) );
+		$locate_mofile = locate_template( array( "languages/{$locale}.mo", "{$locale}.mo" ) );
 
 		/* If a mofile was found based on the given format, set $mofile to that file name. */
 		if ( !empty( $locate_mofile ) )
@@ -294,7 +294,7 @@ function omega_ngettext_with_context( $translated, $single, $plural, $number, $c
  */
 function omega_extensions_gettext( $translated, $text, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -324,7 +324,7 @@ function omega_extensions_gettext( $translated, $text, $domain ) {
  */
 function omega_extensions_gettext_with_context( $translated, $text, $context, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -355,7 +355,7 @@ function omega_extensions_gettext_with_context( $translated, $text, $context, $d
  */
 function omega_extensions_ngettext( $translated, $single, $plural, $number, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -387,7 +387,7 @@ function omega_extensions_ngettext( $translated, $single, $plural, $number, $dom
  */
 function omega_extensions_ngettext_with_context( $translated, $single, $plural, $number, $context, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -437,4 +437,3 @@ function omega_get_region( $locale = '' ) {
 
 	return preg_replace( '/.*?_(.*?)$/i', '$1', $locale );
 }
-

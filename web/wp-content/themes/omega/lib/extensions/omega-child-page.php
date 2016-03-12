@@ -9,7 +9,7 @@ if ( is_admin() ) {
 		$page = add_theme_page( 
 			sprintf( esc_html__( 'Omega Child Themes', 'omega' ) ),	// Settings page name.
 			esc_html__( 'Omega Child Themes', 'omega' ), 			// Menu item name.
-			'edit_theme_options', 						// Required capability.
+			'edit_theme_options', 									// Required capability.
 			'omega-child-themes', 									// Screen name.
 			'omega_child_themes_list' );							// Callback function.
 
@@ -18,45 +18,46 @@ if ( is_admin() ) {
 
 	function omega_child_themes_list() {
 
-		// Set template directory uri
-	    $screenshot_dir = OMEGA_URI . '/images/';
-
 		$omegachilds = array(
+			 	array( 'name' => 'Church+',
+			 		   'url' => 'http://themehall.com/product/churchplus'),
+			 	array( 'name' => 'Composer+',
+			 		   'url' => 'https://themehall.com/product/composer-plus'),
+			 	array( 'name' => 'Custom Footer',
+			 		   'url' => 'https://themehall.com/product/omega-custom-footer-plugin'),
+			 	array( 'name' => 'Composer',
+			 		   'url' => 'https://themehall.com/composer-one-column-omega-child-theme'),
 			 	array( 'name' => 'Alpha',
-			 		   'url' => 'http://themehall.com/alpha-first-omega-child-theme',
-			 		   'img' => 'alpha.png'),
+			 		   'url' => 'https://themehall.com/alpha-first-omega-child-theme'),
 			 	array( 'name' => 'Beta',
-			 		   'url' => 'http://themehall.com/beta-second-omega-child-theme',
-			 		   'img' => 'beta.png'),
+			 		   'url' => 'https://themehall.com/beta-second-omega-child-theme'),
 			 	array( 'name' => 'Omega Child',
-			 		   'url' => 'http://themehall.com/product/omega-child',
-			 		   'img' => 'omega-child.png'),
-			 	array( 'name' => 'Church',
-			 		   'url' => 'http://themehall.com/free-responsive-church-theme-wordpress',
-			 		   'img' => 'church.png'),
+			 		   'url' => 'https://themehall.com/product/omega-child'),
 			 	array( 'name' => 'Custom',
-			 		   'url' => 'http://themehall.com/custom-free-omega-child-theme-wordpress',
-			 		   'img' => 'custom.png'),
+			 		   'url' => 'https://themehall.com/custom-free-omega-child-theme-wordpress'),
 			 	array( 'name' => 'Mobile',
-			 		   'url' => 'http://themehall.com/mobile-theme-mobile-friendly-start',
-			 		   'img' => 'mobile.png'),
+			 		   'url' => 'https://themehall.com/mobile-theme-mobile-friendly-start'),
 			 	array( 'name' => 'Magazine',
-			 		   'url' => 'http://themehall.com/http://themehall.com/responsive-magazine-theme',
-			 		   'img' => 'magazine.png'),
+			 		   'url' => 'https://themehall.com/responsive-magazine-theme'),
 			 	array( 'name' => 'Shopping',
-			 		   'url' => 'http://themehall.com/shopping-ecommerce-wordpress-theme',
-			 		   'img' => 'shopping.png')
+			 		   'url' => 'https://themehall.com/shopping-ecommerce-wordpress-theme'),
+			 	array( 'name' => 'Family',
+			 		   'url' => 'https://themehall.com/free-responsive-family-wordpress-theme'),
+			 	array( 'name' => 'Hotel',
+			 		   'url' => 'https://themehall.com/hotel-wordpress-theme'),
+			 	array( 'name' => 'Sans-serif',
+			 		   'url' => 'https://wordpress.org/themes/sans-serif'),
+			 	array( 'name' => 'Sumo',
+			 		   'url' => 'https://wordpress.org/themes/sumo')			 	
 			 );
 		?>
 	 	<div class="wrap">
-
-			<?php screen_icon(); ?>
 			<h2>
-				<?php printf( __( 'Omega Child Themes', 'Omega' ) ); ?>
+				<?php printf( __( 'Omega Child Themes', 'omega' ) ); ?>
 			</h2>
 
 			<p>
-				<?php printf( __( 'Personalize your Omega powered site with one of Omega child themes below', 'Omega' ) ); ?>
+				<?php printf( __( 'Personalize your Omega powered site with one of Omega child themes below', 'omega' ) ); ?>
 			</p>
 
 			<div id="availablethemes">
@@ -67,18 +68,17 @@ if ( is_admin() ) {
 				if ($omegachild['name'] != $currenttheme->name) {
 					echo '<div class="available-theme">
 						<a class="screenshot" target="_blank" href="' . $omegachild['url'] .'" title="'.$omegachild['name'].'">
-							<img alt="'.$omegachild['name'].'" src="'. $screenshot_dir.$omegachild['img'] .'">
+							'.$omegachild['name'].'
 						</a>
 					</div>';
 				}
 			}
 			?>			
 				<div class="available-theme">
-					<a class="screenshot">
-						<img alt="More to Come" src="<?php echo $screenshot_dir . 'more.png';?>">
-					</a>
+					More to come...
 				</div>		
 			</div>
+
 
 		</div>
 		<?php

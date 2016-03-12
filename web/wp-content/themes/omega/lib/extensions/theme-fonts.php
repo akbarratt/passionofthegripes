@@ -394,7 +394,7 @@ final class Theme_Fonts {
 		$wp_customize->add_section(
 			'fonts',
 			array(
-				'title'      => esc_html__( 'Fonts', 'theme-fonts' ),
+				'title'      => esc_html__( 'Fonts', 'omega' ),
 				'priority'   => 37,
 				'capability' => 'edit_theme_options'
 			)

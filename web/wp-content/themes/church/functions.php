@@ -33,13 +33,15 @@ function church_setup() {
 
 	add_theme_support( 'color-palette', array( 'callback' => 'church_register_colors' ) );
 
+	add_theme_support( 'woocommerce' );
+
 	add_filter( 'loop_pagination_args', 'church_loop_pagination_args' );
 
 	add_action( 'widgets_init', 'church_widgets_init', 15 );
 
 	remove_action( 'omega_home_before_entry', 'omega_entry_header' );
 
-	add_filter( 'theme_mod_theme_layout', 'church_theme_layout', 15 );
+	//add_filter( 'theme_mod_theme_layout', 'church_theme_layout', 15 );
 
 	add_action( 'omega_after_header', 'church_banner' );
 
@@ -68,7 +70,7 @@ function church_header_right() {
 function church_theme_layout( $layout ) {
 	//global $post;
 	//echo (get_post_layout( get_queried_object_id() ));
-	if ( is_front_page() && !is_home() && get_post_layout( get_queried_object_id() ) == 'default' )
+	if ( is_front_page() && !is_home() )
 		$layout = '1c';
 
 	return $layout;
@@ -94,7 +96,12 @@ function church_banner() {
 				if ( is_active_sidebar( 'banner' ) ) {
 					 dynamic_sidebar( 'banner' );
 				} else {
-					church_get_header_image();
+					
+					if ( has_post_thumbnail(get_queried_object_id()) ) {
+						echo get_the_post_thumbnail( get_queried_object_id(), 'full' );
+					} else {
+						church_get_header_image();
+					}
 				}
 			} elseif ( !is_front_page() && get_theme_mod( 'church_header_home' ) ) {
 					echo '';
@@ -278,4 +285,22 @@ function church_admin_header_image() {
 <?php
 }
 
+
+//add_filter( 'get_theme_layout', 'my_theme_layout' );
+
+add_filter( 'theme_mod_theme_layout', 'my_theme_layout', 11 );
+
+function my_theme_layout( $layout ) {
+	if ( is_singular('post')) {		
+		$layout = '1c';
+	}
+
+	return $layout;
+}
+
+function church_load_theme_textdomain() {
+  load_child_theme_textdomain( 'church', get_stylesheet_directory() . '/languages' );
+}
+
+add_action( 'after_setup_theme', 'church_load_theme_textdomain' );
 ?>

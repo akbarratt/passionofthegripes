@@ -5,7 +5,7 @@
 ?>	
 <nav class="nav-secondary" <?php omega_attr( 'menu' ); ?>>
 	
-	<?php omega_do_atomic( 'before_secondary_menu' ); // omega_before_secondary_menu ?>
+	<?php do_action( 'omega_before_secondary_menu' ); ?>
 
 	<?php 
 	wp_nav_menu( array(
@@ -15,7 +15,7 @@
 		)); 
 	?>
 
-	<?php omega_do_atomic( 'after_secondary_menu' ); // omega_after_secondary_menu ?>
+	<?php do_action( 'omega_after_secondary_menu' ); ?>
 
 	
 </nav><!-- .nav-secondary -->

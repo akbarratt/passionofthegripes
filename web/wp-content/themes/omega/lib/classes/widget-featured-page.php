@@ -42,7 +42,7 @@ class Omega_Featured_Page extends WP_Widget {
 
 		$widget_ops = array(
 			'classname'   => 'featured-content featuredpage',
-			'description' => __( 'Displays featured page with thumbnails', 'omega-featured-page' ),
+			'description' => __( 'Displays featured page with thumbnails', 'omega' ),
 		);
 
 		$control_ops = array(
@@ -51,7 +51,7 @@ class Omega_Featured_Page extends WP_Widget {
 			'height'  => 250,
 		);
 
-		parent::__construct( 'featured-page', __( 'Featured Page', 'omega-featured-page' ), $widget_ops, $control_ops );
+		parent::__construct( 'featured-page', __( 'Featured Page', 'omega' ), $widget_ops, $control_ops );
 
 	}
 
@@ -164,12 +164,12 @@ class Omega_Featured_Page extends WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'omega-featured-page' ); ?>:</label>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'omega' ); ?>:</label>
 			<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" class="widefat" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'page_id' ); ?>"><?php _e( 'Page', 'omega-featured-page' ); ?>:</label>
+			<label for="<?php echo $this->get_field_id( 'page_id' ); ?>"><?php _e( 'Page', 'omega' ); ?>:</label>
 			<?php wp_dropdown_pages( array( 'name' => $this->get_field_name( 'page_id' ), 'selected' => $instance['page_id'] ) ); ?>
 		</p>
 
@@ -177,11 +177,11 @@ class Omega_Featured_Page extends WP_Widget {
 
 		<p>
 			<input id="<?php echo $this->get_field_id( 'show_image' ); ?>" type="checkbox" name="<?php echo $this->get_field_name( 'show_image' ); ?>" value="1"<?php checked( $instance['show_image'] ); ?> />
-			<label for="<?php echo $this->get_field_id( 'show_image' ); ?>"><?php _e( 'Show Featured Image', 'omega-featured-page' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'show_image' ); ?>"><?php _e( 'Show Featured Image', 'omega' ); ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'image_size' ); ?>"><?php _e( 'Image Size', 'omega-featured-page' ); ?>:</label>
+			<label for="<?php echo $this->get_field_id( 'image_size' ); ?>"><?php _e( 'Image Size', 'omega' ); ?>:</label>
 			<select id="<?php echo $this->get_field_id( 'image_size' ); ?>" class="omega-image-size-selector" name="<?php echo $this->get_field_name( 'image_size' ); ?>">
 				<option value="thumbnail">thumbnail (<?php echo absint( get_option( 'thumbnail_size_w' ) ); ?>x<?php echo absint( get_option( 'thumbnail_size_h' ) ); ?>)</option>
 				<?php
@@ -193,11 +193,11 @@ class Omega_Featured_Page extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'image_alignment' ); ?>"><?php _e( 'Image Alignment', 'omega-featured-page' ); ?>:</label>
+			<label for="<?php echo $this->get_field_id( 'image_alignment' ); ?>"><?php _e( 'Image Alignment', 'omega' ); ?>:</label>
 			<select id="<?php echo $this->get_field_id( 'image_alignment' ); ?>" name="<?php echo $this->get_field_name( 'image_alignment' ); ?>">
-				<option value="alignnone">- <?php _e( 'None', 'omega-featured-page' ); ?> -</option>
-				<option value="alignleft" <?php selected( 'alignleft', $instance['image_alignment'] ); ?>><?php _e( 'Left', 'omega-featured-page' ); ?></option>
-				<option value="alignright" <?php selected( 'alignright', $instance['image_alignment'] ); ?>><?php _e( 'Right', 'omega-featured-page' ); ?></option>
+				<option value="alignnone">- <?php _e( 'None', 'omega' ); ?> -</option>
+				<option value="alignleft" <?php selected( 'alignleft', $instance['image_alignment'] ); ?>><?php _e( 'Left', 'omega' ); ?></option>
+				<option value="alignright" <?php selected( 'alignright', $instance['image_alignment'] ); ?>><?php _e( 'Right', 'omega' ); ?></option>
 			</select>
 		</p>
 
@@ -205,21 +205,21 @@ class Omega_Featured_Page extends WP_Widget {
 
 		<p>
 			<input id="<?php echo $this->get_field_id( 'show_title' ); ?>" type="checkbox" name="<?php echo $this->get_field_name( 'show_title' ); ?>" value="1"<?php checked( $instance['show_title'] ); ?> />
-			<label for="<?php echo $this->get_field_id( 'show_title' ); ?>"><?php _e( 'Show Page Title', 'omega-featured-page' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'show_title' ); ?>"><?php _e( 'Show Page Title', 'omega' ); ?></label>
 		</p>
 
 		<p>
 			<input id="<?php echo $this->get_field_id( 'show_content' ); ?>" type="checkbox" name="<?php echo $this->get_field_name( 'show_content' ); ?>" value="1"<?php checked( $instance['show_content'] ); ?> />
-			<label for="<?php echo $this->get_field_id( 'show_content' ); ?>"><?php _e( 'Show Page Content', 'omega-featured-page' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'show_content' ); ?>"><?php _e( 'Show Page Content', 'omega' ); ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'content_limit' ); ?>"><?php _e( 'Content Character Limit', 'omega-featured-page' ); ?>:</label>
+			<label for="<?php echo $this->get_field_id( 'content_limit' ); ?>"><?php _e( 'Content Character Limit', 'omega' ); ?>:</label>
 			<input type="text" id="<?php echo $this->get_field_id( 'content_limit' ); ?>" name="<?php echo $this->get_field_name( 'content_limit' ); ?>" value="<?php echo esc_attr( $instance['content_limit'] ); ?>" size="3" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'more_text' ); ?>"><?php _e( 'More Text', 'omega-featured-page' ); ?>:</label>
+			<label for="<?php echo $this->get_field_id( 'more_text' ); ?>"><?php _e( 'More Text', 'omega' ); ?>:</label>
 			<input type="text" id="<?php echo $this->get_field_id( 'more_text' ); ?>" name="<?php echo $this->get_field_name( 'more_text' ); ?>" value="<?php echo esc_attr( $instance['more_text'] ); ?>" />
 		</p>
 		<?php

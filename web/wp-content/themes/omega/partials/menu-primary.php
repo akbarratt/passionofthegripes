@@ -5,8 +5,8 @@
 ?>	
 <nav class="nav-primary" <?php omega_attr( 'menu' ); ?>>
 	
-	<?php omega_do_atomic( 'before_primary_menu' ); // omega_before_primary_menu ?>
-
+	<?php do_action( 'omega_before_primary_menu' ); ?>
+	
 	<?php 
 	wp_nav_menu( array(
 		'theme_location' => 'primary',
@@ -16,7 +16,6 @@
 		)); 
 	?>
 
-	<?php omega_do_atomic( 'after_primary_menu' ); // omega_after_primary_menu ?>
-
+	<?php do_action( 'omega_after_primary_menu' ); ?>
 	
 </nav><!-- .nav-primary -->
