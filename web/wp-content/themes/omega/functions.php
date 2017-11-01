@@ -16,6 +16,8 @@ function omega_theme_setup() {
 
 	/* Load omega functions */
 	require get_template_directory() . '/lib/functions/hooks.php';
+
+	add_theme_support( 'title-tag' ); 
 	
 	/* Load scripts. */
 	add_theme_support( 
@@ -53,8 +55,10 @@ function omega_theme_setup() {
 	/* Enable child themes page */
 	add_theme_support( 'omega-child-page' );
 
+	add_theme_support( 'woocommerce' );
+
 	/* Handle content width for embeds and images. */
-	omega_set_content_width( 640 );
+	omega_set_content_width( 700 );
 
 }
 

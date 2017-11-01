@@ -1,11 +1,24 @@
-<article <?php omega_attr( 'post' ); ?>>	
+<?php
+if ( have_posts() ) : 		
 
-	<div class="entry-wrap">
-		
-		<?php do_action( 'omega_before_entry' ); ?>	
-		<?php do_action( 'omega_entry' ); ?>
-		<?php do_action( 'omega_after_entry' ); ?>
+	do_action( 'omega_before_loop');	
 
-	</div><!-- .entry-wrap -->
+	/* Start the Loop */ 
+	while ( have_posts() ) : the_post(); 
+	?>
+		<article <?php omega_attr( 'post' ); ?>><div class="entry-wrap">
+			<?php 
+			do_action( 'omega_before_entry' ); 
+			do_action( 'omega_entry' );
+			do_action( 'omega_after_entry' ); 
+			?>
+		</div></article>				
+	<?php
+	endwhile; 
 	
-</article><!-- #post-## -->
+	do_action( 'omega_after_loop');			
+
+else : 
+		get_template_part( 'partials/no-results', 'archive' ); 
+endif;	
+?>

@@ -22,6 +22,26 @@ Install
 
 Changelog
 ---------
+0.7.7 - 2016-7-22
+- update google font url for https support
+
+0.7.6 - 2016-1-20
+- Home banner is back
+
+0.7.5 - 2016-1-12
+- fix featured image
+
+0.7.4 - 2015-12-11
+- update style.css
+- fix header issue
+
+0.7.3 - 2015-9-21
+- add Text domain 
+- change link color
+
+0.7.2 - 2015-6-1
+- fixed form element styling on New safari and Chrome
+
 0.7.1 - 2015-3-31
 - update style.css
 

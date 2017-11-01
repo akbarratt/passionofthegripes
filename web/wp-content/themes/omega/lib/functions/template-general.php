@@ -91,8 +91,11 @@ function omega_get_author_uri() {
 	/* Translators: Theme name. */
 	$title = sprintf( __( '%s', 'omega' ), $name );
 
-	$nofollow = is_child_theme() ? 'rel="nofollow"' : '';
-	return sprintf( '<a class="theme-link" %s href="%s" title="%s">%s</a>', $nofollow, esc_url( $uri ), esc_attr( $title ), $name );
+	if (is_child_theme()) {
+		return sprintf( $name );
+	} else {
+		return sprintf( '<a class="theme-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+	}
 }
 
 /**
@@ -424,25 +427,6 @@ function omega_search_title( $prefix = '', $display = true ) {
 
 	/* Translators: %s is the search query. The HTML entities are opening and closing curly quotes. */
 	$title = $prefix . sprintf( __( 'Search results for &#8220;%s&#8221;', 'omega' ), get_search_query() );
-
-	if ( false === $display )
-		return $title;
-
-	echo $title;
-}
-
-/**
- * Retrieve the 404 page title.
- *
- * @since  0.9.0
- * @access public
- * @param  string  $prefix
- * @param  bool    $display
- * @return string
- */
-function omega_404_title( $prefix = '', $display = true ) {
-
-	$title = __( '404 Not Found', 'omega' );
 
 	if ( false === $display )
 		return $title;
