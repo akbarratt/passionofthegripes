@@ -11,54 +11,13 @@
 
 class Jetpack_Holiday_Snow_Settings {
 	function __construct() {
-		add_filter( 'admin_init',     array( $this , 'register_fields' ) );
-		add_action( 'admin_bar_menu', array( $this, 'admin_bar_reminder' ) );
-	}
-
-	function admin_bar_reminder( $wp_admin_bar ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		if ( ! get_option( jetpack_holiday_snow_option_name() ) ) {
-			return;
-		}
-
-		$css = "
-		@-webkit-keyframes spin {
-			from { -webkit-transform: rotate(0deg);   }
-			to   { -webkit-transform: rotate(360deg); }
-		}
-		@keyframes spin {
-			from { transform: rotate(0deg);   }
-			to   { transform: rotate(360deg); }
-		}
-		#wpadminbar .adminbar-holiday-snowflake * {
-			color: #fff;
-		}
-		.adminbar-holiday-snowflake .ab-item:hover span {
-			display: block;
-			-webkit-animation: spin 6s linear infinite;
-			animation:         spin 6s linear infinite;
-		}";
-
-		$wp_admin_bar->add_node( array(
-				'id'     => 'holiday-snow-reminder',
-				'title'  => '<span>&#xFF0A;</span>',
-				'href'   => admin_url( 'options-general.php#jetpack_holiday_snow_enabled' ),
-				'parent' => 'top-secondary',
-				'meta'   => array(
-					'title' => __( 'Snow' , 'jetpack'),
-					'class' => 'adminbar-holiday-snowflake',
-					'html'  => "<style>$css</style>",
-				),
-		) );
+		add_filter( 'admin_init' , array( &$this , 'register_fields' ) );
 	}
 
 	public function register_fields() {
 		register_setting( 'general', jetpack_holiday_snow_option_name(), 'esc_attr' );
-		add_settings_field( jetpack_holiday_snow_option_name(), '<label for="' . esc_attr( jetpack_holiday_snow_option_name() ) . '">' . __( 'Snow' , 'jetpack') . '</label>' , array( $this, 'blog_field_html' ) , 'general' );
-		add_action( 'update_option_' . jetpack_holiday_snow_option_name(), array( $this, 'holiday_snow_option_updated' ) );
+		add_settings_field( jetpack_holiday_snow_option_name(), '<label for="' . esc_attr( jetpack_holiday_snow_option_name() ) . '">' . __( 'Snow' , 'jetpack') . '</label>' , array( &$this, 'blog_field_html' ) , 'general' );
+		add_action( 'update_option_' . jetpack_holiday_snow_option_name(), array( &$this, 'holiday_snow_option_updated' ) );
 	}
 
 	public function blog_field_html() {
@@ -72,18 +31,55 @@ class Jetpack_Holiday_Snow_Settings {
 	}
 
 	public function holiday_snow_option_updated() {
+
+		/**
+		 * Fires when the holiday snow option is updated.
+		 *
+		 * @module theme-tools
+		 *
+		 * @since 2.0.3
+		 */
 		do_action( 'jetpack_holiday_snow_option_updated' );
 	}
 }
 
 function jetpack_holiday_snow_script() {
+
+	/**
+	 * Allow holiday snow.
+	 *
+	 * Note: there's no actual randomness involved in whether it snows
+	 * or not, despite the filter mentioning a "chance of snow."
+	 *
+	 * @module theme-tools
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param bool True to allow snow, false to disable it.
+	 */
 	if ( ! apply_filters( 'jetpack_holiday_chance_of_snow', true ) )
 		return;
 
+	/**
+	 * Fires when it's snowing.
+	 *
+	 * @module theme-tools
+	 *
+	 * @since 2.0.3
+	 */
 	do_action( 'jetpack_holiday_snowing' );
 
+	/**
+	 * Filter the holiday snow JavaScript URL.
+	 *
+	 * @module theme-tools
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param str URL to the holiday snow JavaScript file.
+	 */
 	$snowstorm_url = apply_filters( 'jetpack_holiday_snow_js_url', plugins_url( 'holiday-snow/snowstorm.js', __FILE__ ) );
-	wp_enqueue_script( 'snowstorm', $snowstorm_url, array(), '1.43.20111201' );
+	wp_enqueue_script( 'snowstorm', $snowstorm_url, array(), '1.43.20111201', true );
 }
 
 function jetpack_maybe_holiday_snow() {
@@ -99,7 +95,30 @@ function jetpack_maybe_holiday_snow() {
 }
 
 function jetpack_holiday_snow_option_name() {
+
+	/**
+	 * Filter the holiday snow option name.
+	 *
+	 * @module theme-tools
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param str The holiday snow option name.
+	 */
 	return apply_filters( 'jetpack_holiday_snow_option_name', 'jetpack_holiday_snow_enabled' );
+}
+
+function jetpack_show_holiday_snow_option() {
+	// Always show snow option if a custom snow season has been set.
+	if ( has_filter( 'jetpack_is_holiday_snow_season' ) ) {
+		return true;
+	}
+
+	$today            = time();
+	$first_option_day = mktime( 0, 0, 0, 11, 24 ); // Nov 24
+	$last_option_day  = mktime( 0, 0, 0, 1, 4 );   // Jan 4
+
+	return ( $today >= $first_option_day || $today < $last_option_day );
 }
 
 function jetpack_is_holiday_snow_season() {
@@ -109,6 +128,19 @@ function jetpack_is_holiday_snow_season() {
 
 	$snow = ( $today >= $first_snow_day || $today < $last_snow_day );
 
+	/**
+	 * Filter whether it's winter or not.
+	 *
+	 * You can use this filter if, for example, you live in the
+	 * Southern Hemisphere. In that case, the dates for winter
+	 * above are incorrect for your location.
+	 *
+	 * @module theme-tools
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param bool $snow True if it's snow season, false if not.
+	 */
 	return apply_filters( 'jetpack_is_holiday_snow_season', $snow );
 }
 

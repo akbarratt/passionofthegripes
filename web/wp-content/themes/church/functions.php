@@ -33,13 +33,15 @@ function church_setup() {
 
 	add_theme_support( 'color-palette', array( 'callback' => 'church_register_colors' ) );
 
+	add_theme_support( 'woocommerce' );
+
 	add_filter( 'loop_pagination_args', 'church_loop_pagination_args' );
 
 	add_action( 'widgets_init', 'church_widgets_init', 15 );
 
 	remove_action( 'omega_home_before_entry', 'omega_entry_header' );
 
-	add_filter( 'theme_mod_theme_layout', 'church_theme_layout', 15 );
+	//add_filter( 'theme_mod_theme_layout', 'church_theme_layout', 15 );
 
 	add_action( 'omega_after_header', 'church_banner' );
 
@@ -68,7 +70,7 @@ function church_header_right() {
 function church_theme_layout( $layout ) {
 	//global $post;
 	//echo (get_post_layout( get_queried_object_id() ));
-	if ( is_front_page() && !is_home() && get_post_layout( get_queried_object_id() ) == 'default' )
+	if ( is_front_page() && !is_home() )
 		$layout = '1c';
 
 	return $layout;
@@ -90,12 +92,8 @@ function church_banner() {
 	<div class="banner">
 		<div class="wrap">
 			<?php
-			if(is_front_page()) {
-				if ( is_active_sidebar( 'banner' ) ) {
-					 dynamic_sidebar( 'banner' );
-				} else {
-					church_get_header_image();
-				}
+			if(is_front_page() && is_active_sidebar( 'banner' ) ) {
+				dynamic_sidebar( 'banner' );
 			} elseif ( !is_front_page() && get_theme_mod( 'church_header_home' ) ) {
 					echo '';
 			} else {	
@@ -107,7 +105,9 @@ function church_banner() {
 					$the_title = get_the_title(); 
 				}
 
-				if(is_home() || is_singular('post' ) ) {
+				if (( 'posts' == get_option( 'show_on_front' )) && (is_day() || is_month() || is_year() || is_tag() || is_category() || is_singular('post' ) || is_home())) {
+						church_get_header_image();
+				} elseif(is_home() || is_singular('post' ) ) {
 					if ( has_post_thumbnail($id) ) {
 						echo get_the_post_thumbnail( $id, 'full' );
 					} else {
@@ -144,7 +144,7 @@ function church_register_colors( $color_palette ) {
 		array( 'id' => 'secondary', 'label' => __( 'Secondary Background', 'church' ), 'default' => '050505' )
 	);
 	$color_palette->add_color(
-		array( 'id' => 'link', 'label' => __( 'Link Color', 'church' ), 'default' => '9aa32c' )
+		array( 'id' => 'link', 'label' => __( 'Link Color', 'church' ), 'default' => 'B75343' )
 	);
 
 	/* Add rule sets for colors. */
@@ -165,7 +165,7 @@ function church_register_colors( $color_palette ) {
 	$color_palette->add_rule_set(
 		'link',
 		array(
-			'color'    => '.site-inner .entry-meta a, .site-inner .entry-content a, .site-inner .sidebar a'
+			'color'    => '.site-inner .entry-meta a, .site-inner .entry-content a, .entry-summary a, .pagination a, .site-inner .sidebar a'
 		)
 	);
 }
@@ -205,7 +205,7 @@ function church_header_image_option() {
 <table class="form-table">
 	<tbody>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Header Image Link' ); ?></th>
+			<th scope="row"><?php _e( 'Header Image Link', 'church' ); ?></th>
 			<td>
 				<p>
 					<input type="input" class="regular-text code" name="church_header_link" id="church_header_link" value="<?php echo get_theme_mod( 'church_header_link' ); ?>" />
@@ -213,7 +213,7 @@ function church_header_image_option() {
 			</td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><?php _e( 'Show image on front page only:' ); ?></th>
+			<th scope="row"><?php _e( 'Show image on front page only:', 'church' ); ?></th>
 			<td>
 				<p>
 					<input type="checkbox" name="church_header_home" id="church_header_home" value="1" <?php checked( get_theme_mod( 'church_header_home', false ) ); ?> />
@@ -278,4 +278,22 @@ function church_admin_header_image() {
 <?php
 }
 
+
+//add_filter( 'get_theme_layout', 'my_theme_layout' );
+
+add_filter( 'theme_mod_theme_layout', 'my_theme_layout', 11 );
+
+function my_theme_layout( $layout ) {
+	if ( is_singular('post')) {		
+		$layout = '1c';
+	}
+
+	return $layout;
+}
+
+function church_load_theme_textdomain() {
+  load_child_theme_textdomain( 'church', get_stylesheet_directory() . '/languages' );
+}
+
+add_action( 'after_setup_theme', 'church_load_theme_textdomain' );
 ?>

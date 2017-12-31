@@ -1,17 +1,20 @@
 <?php
 /**
  * Module Name: Publicize
- * Module Description: Connect your site to popular social networks and automatically share new posts with your friends.
- * Sort Order: 1
+ * Module Description: Automated social marketing.
+ * Sort Order: 10
+ * Recommendation Order: 7
  * First Introduced: 2.0
  * Requires Connection: Yes
  * Auto Activate: Yes
- * Module Tags: Social
+ * Module Tags: Social, Recommended
+ * Feature: Engagement
+ * Additional Search Queries: facebook, twitter, google+, googleplus, google, path, tumblr, linkedin, social, tweet, connections, sharing
  */
 
 class Jetpack_Publicize {
 
-	var $in_jetpack = true;
+	public $in_jetpack = true;
 
 	function __construct() {
 		global $publicize_ui;
@@ -21,7 +24,6 @@ class Jetpack_Publicize {
 		if ( $this->in_jetpack && method_exists( 'Jetpack', 'module_configuration_load' ) ) {
 			Jetpack::enable_module_configurable( __FILE__ );
 			Jetpack::module_configuration_load( __FILE__, array( $this, 'jetpack_configuration_load' ) );
-			Jetpack_Sync::sync_posts( __FILE__ );
 		}
 
 		require_once dirname( __FILE__ ) . '/publicize/publicize.php';
@@ -39,21 +41,10 @@ class Jetpack_Publicize {
 
 		// Jetpack specific checks / hooks
 		if ( $this->in_jetpack) {
-			add_action( 'jetpack_activate_module_publicize',   array( $this, 'module_state_toggle' ) );
-			add_action( 'jetpack_deactivate_module_publicize', array( $this, 'module_state_toggle' ) );
-
 			// if sharedaddy isn't active, the sharing menu hasn't been added yet
 			$active = Jetpack::get_active_modules();
 			if ( in_array( 'publicize', $active ) && !in_array( 'sharedaddy', $active ) )
 				add_action( 'admin_menu', array( &$publicize_ui, 'sharing_menu' ) );
-		}
-	}
-
-	function module_state_toggle() {
-		// extra check that we are on the JP blog, just incase
-		if ( class_exists( 'Jetpack' ) && $this->in_jetpack ) {
-			$jetpack = Jetpack::init();
-			$jetpack->sync->register( 'noop' );
 		}
 	}
 
@@ -78,8 +69,8 @@ class Publicize_Util {
 	 * @param int $length
 	 * @return string
 	 */
-	function crop_str( $string, $length = 256 ) {
-		$string = wp_strip_all_tags( (string) $string, true ); // true: collapse Linear Whitespace into " "
+	public static function crop_str( $string, $length = 256 ) {
+		$string = Publicize_Util::sanitize_message( $string );
 		$length = absint( $length );
 
 		if ( mb_strlen( $string, 'UTF-8' ) <= $length ) {
@@ -176,7 +167,12 @@ class Publicize_Util {
 
 		$string = mb_convert_encoding( $string, 'HTML-ENTITIES', 'UTF-8' );
 		$dom = new DOMDocument( '1.0', 'UTF-8' );
-		@$dom->loadHTML( "<html><body>$string</body></html>" ); // suppress parser warning
+
+		// The @ is not enough to suppress errors when dealing with libxml,
+		// we have to tell it directly how we want to handle errors.
+		libxml_use_internal_errors( true );
+		@$dom->loadHTML( "<html><body>$string</body></html>" );
+		libxml_use_internal_errors( false );
 
 		// Strip comment nodes, if any
 		$comment_nodes = self::get_comment_nodes( $dom->documentElement );
@@ -266,8 +262,8 @@ class Publicize_Util {
 		}
 		$done[$post_id] = true;
 
-		if ( function_exists( 'bump_stats_extras' ) )
-			bump_stats_extras( 'publicize_url', $bin );
+		/** This action is documented in modules/widgets/social-media-icons.php */
+		do_action( 'jetpack_bump_stats_extras', 'publicize_url', $bin );
 	}
 
 	public static function build_sprintf( $args ) {
@@ -283,4 +279,34 @@ class Publicize_Util {
 		}
 		return str_replace( $search, $replace, $string );
 	}
+
+	public static function sanitize_message( $message ) {
+		$message = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $message );
+		$message = wp_kses( $message, array() );
+		$message = preg_replace('/[\r\n\t ]+/', ' ', $message);
+		$message = trim( $message );
+		$message = htmlspecialchars_decode( $message, ENT_QUOTES );
+		return $message;
+	}
+}
+
+if( ! ( defined( 'IS_WPCOM' ) && IS_WPCOM ) && ! function_exists( 'publicize_init' ) ) {
+/**
+ * Helper for grabbing a Publicize object from the "front-end" (non-admin) of
+ * a site. Normally Publicize is only loaded in wp-admin, so there's a little
+ * set up that you might need to do if you want to use it on the front end.
+ * Just call this function and it returns a Publicize object.
+ *
+ * @return Publicize Object
+ */
+function publicize_init() {
+	global $publicize;
+
+	if ( ! class_exists( 'Publicize' ) ) {
+		require_once dirname( __FILE__ ) . '/publicize/publicize.php';
+	}
+
+	return $publicize;
+}
+
 }

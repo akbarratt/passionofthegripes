@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html <?php language_attributes( 'html' ); ?>>
+<html <?php language_attributes(); ?>>
 <head>
-<?php wp_head(); // Hook required for scripts, styles, and other <head> items. ?>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<?php wp_head(); ?>
 </head>
-
 <body <?php body_class(); ?> <?php omega_attr( 'body' ); ?>>
-
-<?php omega_do_atomic( 'before' ); // omega_before ?>
-
+<?php do_action( 'omega_before' ); ?>
 <div class="<?php echo omega_apply_atomic( 'site_container_class', 'site-container' );?>">
-
-	<?php omega_do_atomic( 'before_header' ); // omega_before_header ?>
-	<?php omega_do_atomic( 'header' ); // omega_header ?>
-	<?php omega_do_atomic( 'after_header' ); // omega_after_header ?>
-
+	<?php 
+	do_action( 'omega_before_header' );
+	do_action( 'omega_header' );
+	do_action( 'omega_after_header' ); 
+	?>
 	<div class="site-inner">
-
-		<?php omega_do_atomic( 'before_main' ); // omega_before_main ?>
+		<?php do_action( 'omega_before_main' ); ?>

@@ -138,15 +138,6 @@ function omega_body_class_filter( $classes, $class ) {
 	/* Text direction. */
 	$classes[] = is_rtl() ? 'rtl' : 'ltr';
 
-	/* Locale and language. */
-	$locale = get_locale();
-	$lang   = omega_get_language( $locale );
-
-	if ( $locale !== $lang )
-		$classes[] = $lang;
-
-	$classes[] = strtolower( str_replace( '_', '-', $locale ) );
-
 	/* Check if the current theme is a parent or child theme. */
 	$classes[] = is_child_theme() ? 'child-theme' : 'parent-theme';
 
@@ -196,12 +187,6 @@ function omega_body_class_filter( $classes, $class ) {
 		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true ), '.php' ) );
 		if ( !empty( $template ) )
 			$classes[] = "{$post->post_type}-template-{$template}";
-
-		/* Post format. */
-		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
-			$post_format = get_post_format( get_queried_object_id() );
-			$classes[] = ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}";
-		}
 
 		/* Attachment mime types. */
 		if ( is_attachment() ) {

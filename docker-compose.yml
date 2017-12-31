@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    image: davidbarratt/wordpress
+    env_file:
+      - .env
+    volumes:
+      - ./web:/var/www/html:cached
+  cache:
+    image: davidbarratt/varnish
+    environment:
+      VIRTUAL_HOST: passionofthegripes.com,www.passionofthegripes.com,origin.passionofthegripes.com
+    links:
+      - "web:backend"

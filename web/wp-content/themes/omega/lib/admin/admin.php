@@ -15,28 +15,11 @@ add_action( 'admin_menu', 'omega_admin_setup' );
  */
 function omega_admin_setup() {
 
-	/* Load the post meta boxes on the new post and edit post screens. */
-	add_action( 'load-post.php', 'omega_admin_load_post_meta_boxes' );
-	add_action( 'load-post-new.php', 'omega_admin_load_post_meta_boxes' );
-
 	/* Registers admin stylesheets for the framework. */
 	add_action( 'admin_enqueue_scripts', 'omega_admin_register_styles', 1 );
 
 	/* Loads admin stylesheets for the framework. */
 	add_action( 'admin_enqueue_scripts', 'omega_admin_enqueue_styles' );
-}
-
-/**
- * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if 
- * the theme declares support for the feature.
- *
- * @since 0.9.0
- * @return void
- */
-function omega_admin_load_post_meta_boxes() {
-
-	/* Load the post template meta box. */
-	require_if_theme_supports( 'omega-template-hierarchy', trailingslashit( OMEGA_ADMIN ) . 'meta-box-post-template.php' );
 }
 
 /**
@@ -52,11 +35,11 @@ function omega_admin_register_styles() {
 	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	wp_register_style( 'omega-admin', trailingslashit( OMEGA_CSS ) . "omega-admin.css" );
+	wp_register_style( 'omega-admin', trailingslashit( OMEGA_CSS ) . "admin.css" );
 
 	wp_register_style( 'omega-admin-widgets', trailingslashit( OMEGA_CSS ) . "admin-widgets{$suffix}.css" );
 
-	wp_register_script( 'omega-admin', esc_url( trailingslashit( OMEGA_JS ) . "omega-admin.js" ), array( 'jquery' ), '20130528', true );
+	wp_register_script( 'omega-admin', esc_url( trailingslashit( OMEGA_JS ) . "admin.js" ), array( 'jquery' ), '20130528', true );
 }
 
 /**
@@ -71,11 +54,7 @@ function omega_admin_enqueue_styles( $hook_suffix ) {
 	wp_enqueue_style( 'omega-admin' );
 
 	if ( current_theme_supports( 'omega-widgets' ) && 'widgets.php' == $hook_suffix )
-		wp_enqueue_style( 'omega-admin-widgets' );
-	
-    if ( omega_get_settings_page_name() == $hook_suffix ) {
-    	wp_enqueue_script( 'omega-admin' );
-    }
+		wp_enqueue_style( 'omega-admin-widgets' );	   
     
 }
 

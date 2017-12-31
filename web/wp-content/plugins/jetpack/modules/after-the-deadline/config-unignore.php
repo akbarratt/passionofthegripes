@@ -12,6 +12,8 @@ function AtD_ignore_call() {
 	if ( ! $user || $user->ID == 0 )
 		return;
 
+	check_admin_referer( 'atd_ignore' );
+
 	$ignores = explode( ',', AtD_get_setting( $user->ID, 'AtD_ignored_phrases') );
 	array_push( $ignores, $_GET['phrase'] );
 
@@ -111,7 +113,7 @@ function atd_ignore () {
 
 function atd_ignore_init() {
 	jQuery( '#AtD_message' ).hide();
-	jQuery( '#atd_ignores' ).delegate( 'a', 'click', function() {
+	jQuery( '#atd_ignores' ).on( 'click', 'a', function() {
 		atd_unignore( jQuery(this).data( 'ignored' ) );
 		return false;
 	} );
@@ -126,11 +128,11 @@ else
 </script>
    <input type="hidden" name="AtD_ignored_phrases" id="AtD_ignored_phrases" value="<?php echo esc_attr( $ignores ); ?>">
 
-          <p style="font-weight: bold"><?php _e( 'Ignored Phrases', 'jetpack' ); ?></font>
+          <p style="font-weight: bold"><?php _e( 'Ignored Phrases', 'jetpack' ); ?></p>
 
           <p><?php _e( 'Identify words and phrases to ignore while proofreading your posts and pages:', 'jetpack' ); ?></p>
 
-          <p><input type="text" id="AtD_add_ignore" name="AtD_add_ignore"> <input type="button" value="<?php _e( 'Add', 'jetpack' ); ?>" onclick="javascript:atd_ignore()"></p>
+          <p><input type="text" id="AtD_add_ignore" name="AtD_add_ignore"> <input type="button" value="<?php esc_attr_e( 'Add', 'jetpack' ); ?>" onclick="javascript:atd_ignore()"></p>
 
           <div class="tagchecklist" id="atd_ignores"></div>
 

@@ -73,7 +73,7 @@ function omega_get_theme_link() {
 	/* Translators: Theme name. */
 	$title = sprintf( __( '%s WordPress Theme', 'omega' ), $name );
 
-	return sprintf( '<a class="theme-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+	return sprintf( '<a class="theme-link" rel="nofollow" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
 }
 
 /**
@@ -84,14 +84,18 @@ function omega_get_theme_link() {
  * @return string
  */
 function omega_get_author_uri() {
-	$theme = wp_get_theme( get_template() );
+	$theme = wp_get_theme();
 	$uri   = $theme->get( 'AuthorURI' );
 	$name  = $theme->display( 'Author', false, true );
 
 	/* Translators: Theme name. */
 	$title = sprintf( __( '%s', 'omega' ), $name );
 
-	return sprintf( '<a class="theme-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+	if (is_child_theme()) {
+		return sprintf( $name );
+	} else {
+		return sprintf( '<a class="theme-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+	}
 }
 
 /**
@@ -125,6 +129,19 @@ function omega_get_child_theme_link() {
 	$title = sprintf( __( '%s WordPress Theme', 'omega' ), $name );
 
 	return sprintf( '<a class="child-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+}
+
+/**
+ * Returns theme name.
+ *
+ * @since  1.1.2
+ * @access public
+ * @return string
+ */
+function omega_get_theme_name() {
+
+	$theme = wp_get_theme();
+	return $theme->display( 'Name', false, true );
 }
 
 /**
@@ -418,20 +435,33 @@ function omega_search_title( $prefix = '', $display = true ) {
 }
 
 /**
- * Retrieve the 404 page title.
+ * Produces the date of post publication.
  *
- * @since  0.9.0
+ * Supported attributes are:
+ *   after (output after link, default is empty string),
+ *   before (output before link, default is empty string),
+ *   format (date format, default is value in date_format option field),
+ *   label (text following 'before' output, but before date).
+ *
+ * Output passes through 'omega_get_post_date' filter before returning.
+ *
+ * @since 1.1.0
  * @access public
- * @param  string  $prefix
- * @param  bool    $display
+ * @param  string  $after
+ * @param  string  $before
+ * @param  string  $format
+ * @param  string  $label
  * @return string
  */
-function omega_404_title( $prefix = '', $display = true ) {
 
-	$title = __( '404 Not Found', 'omega' );
+function omega_get_post_date( $after = '', $before = '', $format = '', $label = '' ) {
 
-	if ( false === $display )
-		return $title;
+	if ($format == '') $format = get_option( 'date_format' );
 
-	echo $title;
+	$display = ( 'relative' === $format ) ? omega_human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) ) . ' ' . __( 'ago', 'omega' ) : get_the_time( $format );
+
+	$output = sprintf( '<time %s>', omega_get_attr( 'entry-published' ) ) . $before . $label . $display . $after . '</time>';
+
+	return apply_filters( 'omega_get_post_date', $output, $after, $before, $format, $label  );
+
 }
