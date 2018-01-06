@@ -10,5 +10,6 @@ services:
     image: davidbarratt/varnish
     environment:
       VIRTUAL_HOST: passionofthegripes.com,www.passionofthegripes.com,origin.passionofthegripes.com
+      LETSENCRYPT_HOST: passionofthegripes.com,www.passionofthegripes.com,origin.passionofthegripes.com
     links:
       - "web:backend"
