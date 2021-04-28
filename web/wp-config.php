@@ -106,6 +106,15 @@ define('NONCE_SALT', isset($_SERVER['NONCE_SALT']) ? $_SERVER['NONCE_SALT'] : ''
 /**#@-*/
 
 /**
+ * Amazon S3
+ */
+define( 'AS3CF_SETTINGS', serialize( array(
+  'provider' => 'do',
+  'access-key-id' => isset($_SERVER['S3_ACCESS_KEY']) ? $_SERVER['S3_ACCESS_KEY'] : '',
+  'secret-access-key' => isset($_SERVER['S3_SECRET_KEY']) ? $_SERVER['S3_SECRET_KEY']  : '',
+) ) );
+
+/**
  * WordPress Database Table prefix.
  *
  * You can have multiple installations in one database if you give each

@@ -19,6 +19,8 @@ PassEnv SMTP_PORT
 PassEnv SMTP_ENCRYPTION
 PassEnv SMTP_USERNAME
 PassEnv SMTP_PASSWORD
+PassEnv S3_ACCESS_KEY
+PassEnv S3_SECRET_KEY
 
 # BEGIN WordPress
 # The directives (lines) between "BEGIN WordPress" and "END WordPress" are
